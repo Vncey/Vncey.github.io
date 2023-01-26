@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta name="generator" content="Hexo 6.3.0">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.17.2">
+  <meta charset="utf-8">
+  
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://fastly.jsdelivr.net'>
+  <link rel="preconnect" href="https://fastly.jsdelivr.net" crossorigin>
+  <link rel='dns-prefetch' href='//unpkg.com'>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" content="#f8f8f8">
+  
+  <title>RocketMQ Installation - WSL2/UBUNTU - Vincey's blog</title>
+
+  
+    <meta name="description" content="Specs and requirementWSL2rocketmq version : release 5.0.0link: https:&#x2F;&#x2F;github.com&#x2F;apache&#x2F;rocketmq&#x2F;archive&#x2F;refs&#x2F;tags&#x2F;rocketmq-all-5.0.0.tar.gzjava version : openjdk-8-amd6412345678910sudo apt install o">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RocketMQ Installation - WSL2&#x2F;UBUNTU">
+<meta property="og:url" content="https://vncey.github.io/2023/01/26/WSL2-UBUNTU/index.html">
+<meta property="og:site_name" content="Vincey&#39;s blog">
+<meta property="og:description" content="Specs and requirementWSL2rocketmq version : release 5.0.0link: https:&#x2F;&#x2F;github.com&#x2F;apache&#x2F;rocketmq&#x2F;archive&#x2F;refs&#x2F;tags&#x2F;rocketmq-all-5.0.0.tar.gzjava version : openjdk-8-amd6412345678910sudo apt install o">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-01-26T13:14:39.000Z">
+<meta property="article:modified_time" content="2023-01-26T13:55:35.720Z">
+<meta property="article:author" content="Vincey">
+<meta property="article:tag" content="RocketMQ">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+
+  <!-- feed -->
+  
+
+  
+    
+<link rel="stylesheet" href="/css/main.css">
+
+  
+
+  
+
+  
+
+  
+
+
+  
+</head>
+
+<body>
+  
+
+
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left' layout='post'>
+    
+
+  
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://fastly.jsdelivr.net/gh/cdn-x/placeholder@1.0.2/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://i0.hippopx.com/photos/697/991/655/deer-antlers-nature-wildlife-preview.jpg" onerror="javascript:this.classList.add('error');this.src='https://fastly.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">Vincey's blog</div><div class="sub normal cap">learn everything...</div><div class="sub hover cap" style="opacity:0">keep learning</div></a></div>
+
+<nav class="menu dis-select"></nav>
+</header>
+
+
+<div class="widgets">
+
+<widget class="widget-wrapper toc single" id="toc"><div class="widget-header cap dis-select"><span class="name">RocketMQ Installation - WSL2/UBUNTU</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#Specs-and-requirement"><span class="toc-text">Specs and requirement</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WSL2rocketmq-version-release-5-0-0link-https-github-com-apache-rocketmq-archive-refs-tags-rocketmq-all-5-0-0-tar-gzjava-version-openjdk-8-amd64"><span class="toc-text">WSL2rocketmq version : release 5.0.0link: https:&#x2F;&#x2F;github.com&#x2F;apache&#x2F;rocketmq&#x2F;archive&#x2F;refs&#x2F;tags&#x2F;rocketmq-all-5.0.0.tar.gzjava version : openjdk-8-amd64</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#TO-CHECK-PATH"><span class="toc-text">TO CHECK PATH</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Build-complete-ready-for-next-step"><span class="toc-text">Build complete - ready for next step.</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#START-NAMESERVER"><span class="toc-text">START NAMESERVER</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#START-Broker"><span class="toc-text">START Broker</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#TO-STOP-NAMESERVER-AND-BROKER"><span class="toc-text">TO STOP NAMESERVER AND BROKER</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Allow-PORT-TO-ACCESS-IN-WINDOWS"><span class="toc-text">Allow PORT TO ACCESS IN WINDOWS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Permission-Issue-grant-permission"><span class="toc-text">Permission Issue - grant permission</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#additional-checking-file-existent"><span class="toc-text">additional checking file existent</span></a></div></div></widget>
+
+
+
+<widget class="widget-wrapper search"><div class="widget-body"><div class="search-wrapper" id="search"><form class="search-form"><input type="text" class="search-input" id="search-input" placeholder="Search"></form><div id="search-result"></div><div class="search-no-result">No Results!</div></div></div></widget>
+
+
+</div>
+
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a><span class="sep"></span><a class="cap breadcrumb" href="/">Blog</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/MQ/">MQ</a></div><div id="post-meta">Posted on&nbsp;<time datetime="2023-01-26T13:14:39.000Z">2023-01-26</time></div></div>
+
+<article class='md-text content post'>
+<h1 class="article-title"><span>RocketMQ Installation - WSL2/UBUNTU</span></h1>
+<h5 id="Specs-and-requirement"><a href="#Specs-and-requirement" class="headerlink" title="Specs and requirement"></a>Specs and requirement</h5><h2 id="WSL2rocketmq-version-release-5-0-0link-https-github-com-apache-rocketmq-archive-refs-tags-rocketmq-all-5-0-0-tar-gzjava-version-openjdk-8-amd64"><a href="#WSL2rocketmq-version-release-5-0-0link-https-github-com-apache-rocketmq-archive-refs-tags-rocketmq-all-5-0-0-tar-gzjava-version-openjdk-8-amd64" class="headerlink" title="WSL2rocketmq version : release 5.0.0link: https://github.com/apache/rocketmq/archive/refs/tags/rocketmq-all-5.0.0.tar.gzjava version : openjdk-8-amd64"></a>WSL2<br>rocketmq version : release 5.0.0<br>link: <a target="_blank" rel="noopener" href="https://github.com/apache/rocketmq/archive/refs/tags/rocketmq-all-5.0.0.tar.gz">https://github.com/apache/rocketmq/archive/refs/tags/rocketmq-all-5.0.0.tar.gz</a><br>java version : openjdk-8-amd64</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install openjdk-8-jdk</span><br><span class="line">java -version</span><br><span class="line">openjdk version <span class="string">&quot;1.8.0_352&quot;</span></span><br><span class="line">OpenJDK Runtime Environment (build 1.8.0_352-8u352-ga-1~20.04-b08)</span><br><span class="line">OpenJDK 64-Bit Server VM (build 25.352-b08, mixed mode)</span><br><span class="line">nano ~/.bash_profile</span><br><span class="line">    <span class="built_in">export</span> JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64</span><br><span class="line">    <span class="built_in">export</span> ROCKETMQ_HOME=/opt/rocketmq-rocketmq-all-5.0.0/distribution/target/rocketmq-5.0.0/rocketmq-5.0.0</span><br><span class="line">    <span class="built_in">export</span> PATH=<span class="variable">$ROCKETMQ_HOME</span>/bin:<span class="variable">$PATH</span></span><br><span class="line"><span class="built_in">source</span> ~/.bash_profile <span class="comment">## to refresh latest update.</span></span><br></pre></td></tr></table></figure>
+<h4 id="TO-CHECK-PATH"><a href="#TO-CHECK-PATH" class="headerlink" title="TO CHECK PATH"></a>TO CHECK PATH</h4><p> echo $ROCKETMQ_HOME<br> &#x2F;&#x2F;&#x2F;&#x2F;&#x2F;opt&#x2F;rocketmq-rocketmq-all-5.0.0&#x2F;distribution&#x2F;target&#x2F;rocketmq-5.0.0&#x2F;rocketmq-5.0.0<br> echo $JAVA_HOME</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="built_in">cd</span> /opt</span><br><span class="line">&gt; wget https://github.com/apache/rocketmq/archive/refs/tags/rocketmq-all-5.0.0.tar.gz</span><br><span class="line">&gt; <span class="built_in">cd</span> /opt/rocketmq-rocketmq-all-5.0.0/</span><br><span class="line">&gt; mvn -Prelease-all -DskipTests clean install -U</span><br></pre></td></tr></table></figure>
+<h4 id="Build-complete-ready-for-next-step"><a href="#Build-complete-ready-for-next-step" class="headerlink" title="Build complete - ready for next step."></a>Build complete - ready for next step.</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">[INFO] Installing /opt/rocketmq-rocketmq-all-5.0.0/distribution/target/rocketmq-5.0.0.zip to /home/vincey/.m2/repository/org/apache/rocketmq/rocketmq-distribution/5.0.0/rocketmq-distribution-5.0.0.zip</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Reactor Summary <span class="keyword">for</span> Apache RocketMQ 5.0.0 5.0.0:</span><br><span class="line">[INFO]</span><br><span class="line">[INFO] Apache RocketMQ 5.0.0 .............................. SUCCESS [01:09 min]</span><br><span class="line">[INFO] rocketmq-logging 5.0.0 ............................. SUCCESS [ 34.802 s]</span><br><span class="line">[INFO] rocketmq-remoting 5.0.0 ............................ SUCCESS [ 45.342 s]</span><br><span class="line">[INFO] rocketmq-common 5.0.0 .............................. SUCCESS [ 53.854 s]</span><br><span class="line">[INFO] rocketmq-client 5.0.0 .............................. SUCCESS [ 20.222 s]</span><br><span class="line">[INFO] rocketmq-store 5.0.0 ............................... SUCCESS [ 25.022 s]</span><br><span class="line">[INFO] rocketmq-srvutil 5.0.0 ............................. SUCCESS [  5.398 s]</span><br><span class="line">[INFO] rocketmq-filter 5.0.0 .............................. SUCCESS [  3.935 s]</span><br><span class="line">[INFO] rocketmq-acl 5.0.0 ................................. SUCCESS [ 15.476 s]</span><br><span class="line">[INFO] rocketmq-broker 5.0.0 .............................. SUCCESS [ 46.552 s]</span><br><span class="line">[INFO] rocketmq-tools 5.0.0 ............................... SUCCESS [ 10.486 s]</span><br><span class="line">[INFO] rocketmq-controller 5.0.0 .......................... SUCCESS [  5.169 s]</span><br><span class="line">[INFO] rocketmq-namesrv 5.0.0 ............................. SUCCESS [ 12.627 s]</span><br><span class="line">[INFO] rocketmq-proxy 5.0.0 ............................... SUCCESS [ 33.403 s]</span><br><span class="line">[INFO] rocketmq-container 5.0.0 ........................... SUCCESS [  4.208 s]</span><br><span class="line">[INFO] rocketmq-test 5.0.0 ................................ SUCCESS [ 19.495 s]</span><br><span class="line">[INFO] rocketmq-openmessaging 5.0.0 ....................... SUCCESS [  5.015 s]</span><br><span class="line">[INFO] rocketmq-example 5.0.0 ............................. SUCCESS [ 28.397 s]</span><br><span class="line">[INFO] rocketmq-distribution 5.0.0 ........................ SUCCESS [04:38 min]</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] BUILD SUCCESS</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Total time:  11:58 min</span><br><span class="line">[INFO] Finished at: 2023-01-26T17:21:57+08:00</span><br></pre></td></tr></table></figure>
+<p>cd to &#x2F;opt&#x2F;rocketmq-rocketmq-all-5.0.0&#x2F;distribution&#x2F;target&#x2F;rocketmq-5.0.0&#x2F;rocketmq-5.0.0</p>
+<h5 id="START-NAMESERVER"><a href="#START-NAMESERVER" class="headerlink" title="START NAMESERVER"></a>START NAMESERVER</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="built_in">nohup</span> sh bin/mqnamesrv &amp; <span class="built_in">tail</span> -f ~/logs/rocketmqlogs/namesrv.log</span><br><span class="line">&gt; <span class="built_in">tail</span> -f nohup.out</span><br><span class="line"><span class="comment">### nohup.out shown sucessfully start name server.</span></span><br><span class="line">The Name Server boot success. serializeType=JSON</span><br></pre></td></tr></table></figure>
+<h5 id="START-Broker"><a href="#START-Broker" class="headerlink" title="START Broker"></a>START Broker</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="built_in">nohup</span> sh bin/mqbroker -n localhost:9876 --enable-proxy &amp; <span class="built_in">tail</span> -f ~/logs/rocketmqlogs/broker_default.log</span><br><span class="line">&gt; <span class="built_in">tail</span> -f nohup.out</span><br><span class="line"><span class="comment">### nohup.out shown sucessfully start broker.</span></span><br><span class="line">The broker[LAPTOP-F7AOJL27, 172.20.32.00:10911] boot success. serializeType=JSON</span><br></pre></td></tr></table></figure>
+
+
+<h5 id="TO-STOP-NAMESERVER-AND-BROKER"><a href="#TO-STOP-NAMESERVER-AND-BROKER" class="headerlink" title="TO STOP NAMESERVER AND BROKER"></a>TO STOP NAMESERVER AND BROKER</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&gt;  sh bin/mqshutdown broker</span><br><span class="line"><span class="comment">### shown shutdown successfully</span></span><br><span class="line">The mqbroker(16375) is running...</span><br><span class="line">Send shutdown request to mqbroker(16375) OK</span><br><span class="line"></span><br><span class="line">&gt; sh bin/mqshutdown namesrv</span><br><span class="line"><span class="comment">### shown shutdown successfully </span></span><br><span class="line">The mqnamesrv(15818) is running...</span><br><span class="line">Send shutdown request to mqnamesrv(15818) OK</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="Allow-PORT-TO-ACCESS-IN-WINDOWS"><a href="#Allow-PORT-TO-ACCESS-IN-WINDOWS" class="headerlink" title="Allow PORT TO ACCESS IN WINDOWS"></a>Allow PORT TO ACCESS IN WINDOWS</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt;  sudo nano /etc/wsl.conf</span><br><span class="line"></span><br><span class="line">add the following lines to file:</span><br><span class="line">[network]</span><br><span class="line">generateHosts = <span class="literal">true</span></span><br><span class="line">generateResolvConf = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">Verify that the ports are open by running the following <span class="built_in">command</span> on the Windows host:</span><br><span class="line">&gt; netstat -an | find <span class="string">&quot;9876&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h4 id="Permission-Issue-grant-permission"><a href="#Permission-Issue-grant-permission" class="headerlink" title="Permission Issue - grant permission"></a>Permission Issue - grant permission</h4><p>failed to compile the package</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">chown</span> -R <span class="variable">$USER</span>:<span class="variable">$USER</span> /opt/rocketmq-rocketmq-all-5.0.0/target/</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="additional-checking-file-existent"><a href="#additional-checking-file-existent" class="headerlink" title="additional checking file existent"></a>additional checking file existent</h4><p> ls -l &#x2F;opt&#x2F;rocketmq-rocketmq-all-5.0.0&#x2F;distribution&#x2F;target&#x2F;rocketmq-5.0.0&#x2F;rocketmq-5.0.0&#x2F;bin&#x2F;runserver.sh<br>ls -l &#x2F;opt&#x2F;rocketmq-rocketmq-all-5.0.0&#x2F;distribution&#x2F;target&#x2F;rocketmq-5.0.0&#x2F;rocketmq-5.0.0&#x2F;bin&#x2F;mqbroker</p>
+
+
+<div class="article-footer reveal fs14"><section id="license"><div class="header"><span>License</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section></div>
+
+</article>
+
+<div class="related-wrap reveal" id="read-next"><section class="body"><div class="item" id="prev"></div><div class="item" id="next"><div class="note">Older</div><a href="/2022/11/24/rocketmq/">Mqbroker cannot start. No Mqbroker is running.</a></div></section></div>
+
+
+
+
+
+
+
+
+      
+<footer class="page-footer reveal fs12"><hr><div class="text"><p>本站由 <a href="/">@anonymity</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar">Stellar</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+
+      <div class='float-panel mobile-only blur' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  stellar = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    loadCSS: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    // 从 butterfly 和 volantis 获得灵感
+    loadScript: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    // https://github.com/jerryc127/hexo-theme-butterfly
+    jQuery: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        stellar.loadScript(stellar.plugins.jQuery).then(fn)
+      } else {
+        fn()
+      }
+    }
+  };
+  stellar.version = '1.17.2';
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.17.2';
+  stellar.config = {
+    date_suffix: {
+      just: 'Just',
+      min: 'minutes ago',
+      hour: 'hours ago',
+      day: 'days ago',
+      month: 'months ago',
+    },
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://fastly.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js'
+  };
+
+  if ('local_search') {
+    stellar.search = {};
+    stellar.search.service = 'local_search';
+    if (stellar.search.service == 'local_search') {
+      let service_obj = Object.assign({}, {"field":"all","path":"/search.json","content":true,"codeblock":true,"sort":"-date"});
+      stellar.search[stellar.search.service] = service_obj;
+    }
+  }
+
+  // stellar js
+  stellar.plugins.stellar = Object.assign({"sites":"/js/plugins/sites.js","friends":"/js/plugins/friends.js","ghinfo":"/js/plugins/ghinfo.js","timeline":"/js/plugins/timeline.js","linkcard":"/js/plugins/linkcard.js","fcircle":"/js/plugins/fcircle.js"});
+
+  stellar.plugins.marked = Object.assign("https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js");
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://fastly.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper@6/swiper-bundle.min.css","js":"https://unpkg.com/swiper@6/swiper-bundle.min.js"});
+  }
+  if ('' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":null,"js":"https://fastly.jsdelivr.net/npm/scrollreveal@4.0.9/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://fastly.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://fastly.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.fancybox = Object.assign({"enable":true,"js":"https://fastly.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js","css":"https://fastly.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css","selector":".swiper-slide img"});
+  }
+  if ('false' == 'true') {
+    stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti/umd/heti.min.css","js":"https://unpkg.com/heti/umd/heti-addon.min.js"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="/js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+
+
+<!-- inject -->
+
+
+  </div>
+</body>
+</html>
